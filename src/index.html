@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>An Intro To Rust</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <textarea data-template>
+            ## An Intro To Rust
+
+            Oliver Hamlet
+          </textarea>
+        </section>
+        <section>
+          <section data-markdown>
+            <textarea data-template>
+              ## What Is Rust?
+
+              Ripped straight from its homepage:
+
+              > Rust is a systems programming language that runs blazingly fast, prevents segfaults, and guarantees thread safety.
+
+              It's strongly-typed, mixed-paradigm and compiled to native machine code.
+            </textarea>
+          </section>
+
+          <section data-markdown>
+            <textarea data-template>
+              ## Speed?
+
+              Rust has no garbage collector, and is about as fast as C/C++. Though it has powerful high-level abstractions, many of them are zero-cost.
+
+              It's also got zero(ish) overhead two-way interoperability with C.
+            </textarea>
+          </section>
+
+          <section data-markdown>
+            <textarea data-template>
+              ## Memory Safety?
+
+              * Segmentation faults are impossible
+              * Null pointer dereferencing is impossible
+              * Buffer overflows are impossible
+
+              Memory bugs cause ~ 20% of CVEs, so this can be a big deal.
+            </textarea>
+          </section>
+
+          <section data-markdown>
+            <textarea data-template>
+              ## The Borrow Checker
+
+              Rust achieves memory safety at compile time by enforcing two rules:
+
+              1. An object can only be owned by one variable.
+              2. You can 'borrow' one mutable reference to an object, or multiple immutable references, but not both at the same time.
+
+              Thread safety follows from these rules too, they prohibit data races.
+            </textarea>
+          </section>
+
+          <section data-markdown>
+            <textarea data-template>
+              ## Unsafe Rust
+
+              Some operations can't be performed safely, or only with unacceptable overhead.
+
+              ```rust
+              #[no_mangle]
+              pub unsafe extern "C" fn espm_plugin_filename(
+                  plugin_ptr: *const Plugin,
+                  filename: *mut *mut c_char,
+              ) -> uint32_t {
+                  if filename.is_null() || plugin_ptr.is_null() {
+                      ESPM_ERROR_NULL_POINTER
+                  } else {
+                      // Logic here.
+                  }
+              }
+
+              fn main() {
+                  let p: *const Plugin = ptr::null();
+                  let f: *mut *mut c_char = ptr::null_mut();
+                  unsafe {
+                    espm_plugin_filename(p, f);
+                  }
+              }
+              ```
+            </textarea>
+          </section>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            ## Resources
+
+            * [Rust's Website](https://www.rust-lang.org/)
+            * [The Book](https://doc.rust-lang.org/book/)
+            * [Rust By Example](http://rustbyexample.com/)
+            * [Rust Playground](https://play.rust-lang.org/) (online sandbox)
+            * [Standard Library Reference](https://doc.rust-lang.org/std/)
+          </textarea>
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info about config & dependencies:
+      // - https://github.com/hakimel/reveal.js#configuration
+      // - https://github.com/hakimel/reveal.js#dependencies
+      Reveal.initialize({
+        dependencies: [
+          { src: 'plugin/markdown/marked.js' },
+          { src: 'plugin/markdown/markdown.js' },
+          { src: 'plugin/notes/notes.js', async: true },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        ]
+      });
+    </script>
+  </body>
+</html>

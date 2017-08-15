@@ -1,0 +1,18 @@
+{
+  "name": "intro-to-rust",
+  "version": "1.0.0",
+  "description": "A Reveal.js presentation introducing Rust",
+  "main": "index.js",
+  "dependencies": {
+    "reveal.js": "^3.5.0",
+    "revealer": "^2.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "serve": "revealer --serve",
+    "build": "revealer --build [dest-dir]",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Oliver Hamlet",
+  "license": "CC-BY-4.0"
+}
