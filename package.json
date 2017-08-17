@@ -10,7 +10,8 @@
   "devDependencies": {},
   "scripts": {
     "serve": "revealer --serve",
-    "build": "revealer --build [dest-dir]",
+    "build": "revealer --build ./build",
+    "publish": "./publish.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Oliver Hamlet",
