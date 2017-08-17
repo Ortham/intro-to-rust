@@ -1,0 +1,392 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>An Intro To Rust</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <textarea data-template>
+            ## An Intro To Rust
+
+            Oliver Hamlet
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            ## What Is Rust?
+
+            Ripped straight from its homepage:
+
+            > Rust is a systems programming language that runs blazingly fast, prevents segfaults, and guarantees thread safety.
+
+            It's strongly-typed, mixed-paradigm and compiled to native machine code.
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            ## Who Uses It?
+
+            * Me!
+            * Mozilla
+            * Dropbox
+            * Canonical
+            * Chef
+            * Sentry
+            * ...
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            ## Speed
+
+            Rust has no garbage collector, and is about as fast as C/C++. Though it has powerful high-level abstractions, many of them are zero-cost.
+
+            It's also got zero(ish) overhead two-way interoperability with C.
+          </textarea>
+        </section>
+        <section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Memory &amp; Thread Safety
+
+              Memory bugs cause ~ 20% of CVEs.
+
+              Rust doesn't have:
+
+              * Segmentation faults
+              * Buffer overflows
+              * Null pointer dereferencing
+              * Invalid references
+              * Data races
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Borrows &amp; Lifetimes
+
+              Rust achieves memory and thread safety at compile time by enforcing three rules:
+
+              1. An object can only be owned by one variable.
+              2. You can 'borrow' one mutable reference to an object, or multiple immutable references, but not both at the same time.
+              3. A reference may not outlive the variable that owns the object.
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Copies, Moves &  Borrows
+
+              ```rust
+              fn copy() {
+                  let a = 2;
+                  let b = a;
+                  let c = a;
+              }
+              fn use_after_move() {
+                  let a = String::new();
+                  let b = a;
+                  let c = a;  //Compile error
+              }
+              fn borrow() {
+                  let a = String::new();
+                  let b = &a;
+                  let c = &a;
+              }
+              fn borrow_after_mut_borrow() {
+                  let mut a = String::new();
+                  let b = &mut a;
+                  let c = &a;  //Compile error
+              }
+              fn move_after_borrow() {
+                  let a = String::new();
+                  let b = &a;
+                  let c = a;  //Compile error
+              }
+              ```
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Lifetimes
+
+              ```rust
+              fn lifetime_too_short() {
+                  let a;
+                  let b = String::new();
+                  a = &b;  //Compile error
+              }
+              fn lifetime_inferred(string: &str) -> &str {
+                  string
+              }
+              fn lifetime_ambiguous(array: &[&str], value: &str) -> &str {
+                  array[0]
+              }
+              fn lifetimes<'a>(array: &[&'a str], value: &str) -> &'a str {
+                  array[0]
+              }
+              ```
+            </textarea>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Language Features
+
+              A small selection
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Immutable By Default
+
+              ```rust
+              fn main() {
+                  let a = String::from("a");
+                  a.push('a');  //Compile error
+
+                  let mut c = String::from("c");
+                  c.push('c');
+              }
+              ```
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Expressions
+
+              Semicolons distinguish statements from expressions.
+
+              ```rust
+              fn true_or_false(b: bool) -> &'static str {
+                  if b {
+                      "true"
+                  } else {
+                      "false"
+                  }
+              }
+              ```
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Tuples
+
+              ```rust
+              fn tuple(a: u8, b: bool) -> (u8, bool) {
+                  (a, b)
+              }
+              fn main() {
+                  let pair = tuple(5, false);
+                  let (a, b) = pair;
+              }
+              ```
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Enums
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Pattern Matching
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## UTF-8 Strings
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Implementations
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Traits
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Structs
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Generics
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Attributes
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Macros
+            </textarea>
+          </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Concurrency
+
+              Not a language feature!
+
+              * Threads
+              * Mutexes
+              * Channels
+
+              Libraries still innovating...
+            </textarea>
+          </section>
+            <section data-markdown>
+              <textarea data-template>
+                ## Threads
+              </textarea>
+            </section>
+            <section data-markdown>
+              <textarea data-template>
+                ## Mutexes
+              </textarea>
+            </section>
+            <section data-markdown>
+              <textarea data-template>
+                ## Channels
+              </textarea>
+            </section>
+        </section>
+        <section>
+          <section data-markdown>
+            <textarea data-template>
+              ## The Ecosystem
+
+              * Cargo
+              * Documentation
+              * RFC process
+              * 6 week release cycle
+            </textarea>
+          </section>
+            <section data-markdown>
+              <textarea data-template>
+                ## Cargo
+
+                * Runs tests in parallel by default!
+              </textarea>
+            </section>
+            <section data-markdown>
+              <textarea data-template>
+                ## Documentation
+              </textarea>
+            </section>
+            <section data-markdown>
+              <textarea data-template>
+                ## RFC process
+              </textarea>
+            </section>
+            <section data-markdown>
+              <textarea data-template>
+                ## 6 week release cycle
+              </textarea>
+            </section>
+        </section>
+        <section>
+          <section data-markdown>
+              <textarea data-template>
+                ## Warts
+
+                * Cool stuff stuck in nightly
+                * Slow compilation
+                * Potentially unnecessary cognitive overhead
+                * Variable shadowing
+                * Modules are sometimes confusing (improvements on the way)
+                * No code coverage integration :(
+                * No setup/teardown provided for tests
+
+              </textarea>
+          </section>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            ## Unsafe Rust
+
+            Some operations can't be performed 'safely', or only with unacceptable overhead.
+
+            ```rust
+            #[no_mangle]
+            pub unsafe extern "C" fn espm_plugin_filename(
+                plugin_ptr: *const Plugin,
+                filename: *mut *mut c_char,
+            ) -> uint32_t {
+                if filename.is_null() || plugin_ptr.is_null() {
+                    ESPM_ERROR_NULL_POINTER
+                } else {
+                    // Logic here.
+                }
+            }
+
+            fn main() {
+                let p: *const Plugin = ptr::null();
+                let f: *mut *mut c_char = ptr::null_mut();
+                unsafe {
+                  espm_plugin_filename(p, f);
+                }
+            }
+            ```
+          </textarea>
+        </section>
+        <section data-markdown>
+          <textarea data-template>
+            ## Resources
+
+            * [Rust's Website](https://www.rust-lang.org/)
+            * [The Book](https://doc.rust-lang.org/book/)
+            * [Rust By Example](http://rustbyexample.com/)
+            * [Rust Playground](https://play.rust-lang.org/) (online sandbox)
+            * [Standard Library Reference](https://doc.rust-lang.org/std/)
+            * [A Gentle Introduction To Rust](http://stevedonovan.github.io/rust-gentle-intro/readme.html)
+          </textarea>
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info about config & dependencies:
+      // - https://github.com/hakimel/reveal.js#configuration
+      // - https://github.com/hakimel/reveal.js#dependencies
+      Reveal.initialize({
+        dependencies: [
+          { src: 'plugin/markdown/marked.js' },
+          { src: 'plugin/markdown/markdown.js' },
+          { src: 'plugin/notes/notes.js', async: true },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        ]
+      });
+    </script>
+  </body>
+</html>
