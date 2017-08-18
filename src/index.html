@@ -410,6 +410,27 @@
               ```
             </textarea>
           </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Modules
+
+              ```rust
+              use std::path::Path;
+              mod mylibrary {
+                  pub mod paths {
+                      use std::io;
+                      use std::path::Path;
+                      pub fn delete(path: &Path) -> Result<(), io::Error> {
+                          Ok(())
+                      }
+                  }
+              }
+              fn main() {
+                  mylibrary::paths::delete(Path::new("/tmp/foo/bar.txt"));
+              }
+              ```
+            </textarea>
+          </section>
         </section>
         <section>
           <section data-markdown>
@@ -454,7 +475,7 @@
           </section>
             <section data-markdown>
               <textarea data-template>
-                ## Modules, Crates & Cargo
+                ## Crates & Cargo
 
                 * Runs tests in parallel by default!
               </textarea>
