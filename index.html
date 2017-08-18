@@ -39,7 +39,7 @@
 
             > Rust is a systems programming language that runs blazingly fast, prevents segfaults, and guarantees thread safety.
 
-            It's strongly-typed, mixed-paradigm and compiled to native machine code.
+            It's type safe, mixed-paradigm and compiled to native machine code.
           </textarea>
         </section>
         <section data-markdown>
@@ -49,6 +49,7 @@
             * Me!
             * Mozilla
             * Dropbox
+            * Samsung
             * Canonical
             * Chef
             * Sentry
@@ -93,7 +94,7 @@
           </section>
           <section data-markdown>
             <textarea data-template>
-              ## Copies, Moves &  Borrows
+              ## Copies, Moves & Clones
 
               ```rust
               fn copy() {
@@ -106,6 +107,19 @@
                   let b = a;
                   let c = a;  //Compile error
               }
+              fn clone() {
+                let a = String::new();
+                let b = a.clone();
+                let c = a;
+              }
+              ```
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Borrows
+
+              ```rust
               fn borrow() {
                   let a = String::new();
                   let b = &a;
@@ -205,46 +219,216 @@
           <section data-markdown>
             <textarea data-template>
               ## Enums
+
+              ```rust
+              enum Option<T> {
+                  Some(T),
+                  None
+              }
+              enum Colour {
+                  Red = 0xF00,
+                  Green = 0x0F0,
+                  Blue = 0x00F,
+              }
+              fn get_colour(i: i8) -> Option<Colour> {
+                  if i % 2 == 0 { Some(Colour::Red) } else { None }
+              }
+              ```
             </textarea>
           </section>
           <section data-markdown>
             <textarea data-template>
               ## Pattern Matching
+
+              ```rust
+              enum Colour {
+                  Red = 0x100,
+                  Green = 0x0F0,
+                  Blue = 0x00F,
+              }
+              fn main() {
+                  let foo = (Some(Colour::Red), 5);
+                  match foo {
+                      (Some(Colour::Red), 5) => println!("deep matching"),
+                      (Some(Colour::Red), ref x) if *x < 5 => println!("conditions"),
+                      (_, 5) | (_, 70) => println!("don't care about colour"),
+                      _ => println!("matching must be exhaustive"),
+                  }
+              }
+              ```
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Error Handling
+
+              ```rust
+              enum Result<T, E> {
+                Ok(T),
+                Err(E),
+              }
+              fn divide(dividend: i8, divisor: i8) -> Result<i8, (i8,i8)> {
+                  if dividend == 0 {
+                      Err((dividend, divisor))
+                  } else {
+                      Ok(dividend / divisor)
+                  }
+              }
+              fn main() {
+                  println!("{}", divide(5, 4).unwrap());
+                  println!("{}", divide(5, 0).unwrap());  //Panics
+              }
+              ```
+
+              No exceptions, `Result<T,E>` enum and panics instead.
             </textarea>
           </section>
           <section data-markdown>
             <textarea data-template>
               ## UTF-8 Strings
+
+              ```rust
+              fn main() {
+                  // some bytes, in a vector
+                  let sparkle_heart = vec![240, 159, 146, 150];
+
+                  // We know these bytes are valid, so we'll use `unwrap()`.
+                  let sparkle_heart = String::from_utf8(sparkle_heart).unwrap();
+
+                  assert_eq!("💖", sparkle_heart);
+                  assert_eq!(4, sparkle_heart.len());
+                  assert_eq!(1, sparkle_heart.chars().count());
+                  assert_eq!(2, "y̆".chars().count());
+                  assert_eq!("SS", "ß".to_uppercase());
+                  &sparkle_heart[0..2];  //Panics
+              }
+              ```
             </textarea>
           </section>
           <section data-markdown>
             <textarea data-template>
-              ## Implementations
+              ## Iterators & Closures
+
+              ```rust
+              fn main() {
+                  for i in 5..10 {
+                      println!("{}", i);
+                  }
+                  let numbers = vec![2, 8];
+                  let strings: Vec<(String, i8)> = vec![1, 1, 2, 3, 5, 8]
+                      .iter()
+                      .filter(|i| *i % 2 == 0)
+                      .map(|i| i.to_string())
+                      .zip(numbers)
+                      .collect();
+              }
+              ```
             </textarea>
           </section>
           <section data-markdown>
             <textarea data-template>
               ## Traits
-            </textarea>
-          </section>
-          <section data-markdown>
-            <textarea data-template>
-              ## Structs
+
+              ```
+              trait Party {
+                  fn start_party() -> &'static str { "🎉" }
+                  fn serve_drinks(&self) -> &'static str;
+              }
+              trait BeerFestival : Party {
+                  fn serve_drinks(&self) -> &'static str { "🍻" }
+              }
+              impl Party for u8 {
+                  fn serve_drinks(&self) -> &'static str {
+                      if *self < 18 { "🚰" } else { "🍸"}
+                  }
+              }
+              fn main() {
+                  println!("{}", 16u8.start_party());
+              }
+              ```
             </textarea>
           </section>
           <section data-markdown>
             <textarea data-template>
               ## Generics
+
+              ```rust
+              fn generic_multiply<T>(x: T, y: T) -> T
+              where
+                  T: std::ops::Mul<T, Output = T>,
+              {
+                  x * y
+              }
+              fn main() {
+                  generic_multiply(2, 5);
+              }
+              ```
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
+              ## Structs
+
+              ```rust
+              struct Counter<T: std::ops::AddAssign> {
+                  start: T,
+                  value: T,
+              }
+              impl Counter<f64> {
+                  pub fn increment(&mut self) {
+                      self.value += 1.0;
+                  }
+              }
+              fn main() {
+                  let mut c = Counter { start: 3.14, value: 42.0 };
+                  c.increment();
+              }
+              ```
+
+              No object inheritance!
             </textarea>
           </section>
           <section data-markdown>
             <textarea data-template>
               ## Attributes
+
+              ```rust
+              #[derive(Debug, PartialEq)]
+              struct Counter {
+                  value: i8,
+              }
+              fn main(){
+                  let c1 = Counter { value: 5 };
+                  let c2 = Counter { value: 10 };
+                  assert_ne!(c1, c2);
+                  assert_eq!("Counter { value: 5 }", format!("{:?}", c1));
+              }
+              #[test]
+              fn check() {
+                  assert_eq!(2, 1 + 1);
+              }
+              ```
             </textarea>
           </section>
           <section data-markdown>
             <textarea data-template>
-              ## Macros
+              ## Modules
+
+              ```rust
+              use std::path::Path;
+              mod mylibrary {
+                  pub mod paths {
+                      use std::io;
+                      use std::path::Path;
+                      pub fn delete(path: &Path) -> Result<(), io::Error> {
+                          Ok(())
+                      }
+                  }
+              }
+              fn main() {
+                  mylibrary::paths::delete(Path::new("/tmp/foo/bar.txt"));
+              }
+              ```
             </textarea>
           </section>
         </section>
@@ -291,9 +475,17 @@
           </section>
             <section data-markdown>
               <textarea data-template>
-                ## Cargo
+                ## Crates & Cargo
 
+                * Distributable units (libraries/executables) are known as crates, and can be published as source (with docs) to https://crates.io.
+                * Cargo provides a build system and dependency management
                 * Runs tests in parallel by default!
+
+                ```
+                cd ./project
+                cargo test
+                cargo build --release
+                ```
               </textarea>
             </section>
             <section data-markdown>
@@ -304,6 +496,11 @@
             <section data-markdown>
               <textarea data-template>
                 ## RFC process
+
+                * Rust development is driven by an RFC process (for substantial changes).
+                * Anyone can submit an RFC by making a pull request to https://github.com/rust-lang/rfcs
+                * Anyone can discuss the RFC in the PR comments.
+                * The relevant development team decides to merge/close/postpone the RFC based on the discussion.
               </textarea>
             </section>
             <section data-markdown>
@@ -320,10 +517,13 @@
                 * Cool stuff stuck in nightly
                 * Slow compilation
                 * Potentially unnecessary cognitive overhead
-                * Variable shadowing
-                * Modules are sometimes confusing (improvements on the way)
+                * Syntax can be unnecessarily verbose
+                * No specialisation
                 * No code coverage integration :(
                 * No setup/teardown provided for tests
+                * Modules are sometimes confusing
+
+                Many of these are being worked on though.
 
               </textarea>
           </section>
@@ -367,6 +567,7 @@
             * [Rust Playground](https://play.rust-lang.org/) (online sandbox)
             * [Standard Library Reference](https://doc.rust-lang.org/std/)
             * [A Gentle Introduction To Rust](http://stevedonovan.github.io/rust-gentle-intro/readme.html)
+            * [This Week In Rust](https://this-week-in-rust.org/)
           </textarea>
         </section>
       </div>
