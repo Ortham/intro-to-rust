@@ -477,7 +477,15 @@
               <textarea data-template>
                 ## Crates & Cargo
 
+                * Distributable units (libraries/executables) are known as crates, and can be published as source (with docs) to https://crates.io.
+                * Cargo provides a build system and dependency management
                 * Runs tests in parallel by default!
+
+                ```
+                cd ./project
+                cargo test
+                cargo build --release
+                ```
               </textarea>
             </section>
             <section data-markdown>
@@ -488,6 +496,11 @@
             <section data-markdown>
               <textarea data-template>
                 ## RFC process
+
+                * Rust development is driven by an RFC process (for substantial changes).
+                * Anyone can submit an RFC by making a pull request to https://github.com/rust-lang/rfcs
+                * Anyone can discuss the RFC in the PR comments.
+                * The relevant development team decides to merge/close/postpone the RFC based on the discussion.
               </textarea>
             </section>
             <section data-markdown>
@@ -504,10 +517,13 @@
                 * Cool stuff stuck in nightly
                 * Slow compilation
                 * Potentially unnecessary cognitive overhead
-                * Variable shadowing
-                * Modules are sometimes confusing (improvements on the way)
+                * Syntax can be unnecessarily verbose
+                * No specialisation
                 * No code coverage integration :(
                 * No setup/teardown provided for tests
+                * Modules are sometimes confusing
+
+                Many of these are being worked on though.
 
               </textarea>
           </section>
@@ -551,6 +567,7 @@
             * [Rust Playground](https://play.rust-lang.org/) (online sandbox)
             * [Standard Library Reference](https://doc.rust-lang.org/std/)
             * [A Gentle Introduction To Rust](http://stevedonovan.github.io/rust-gentle-intro/readme.html)
+            * [This Week In Rust](https://this-week-in-rust.org/)
           </textarea>
         </section>
       </div>
