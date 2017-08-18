@@ -279,6 +279,8 @@
                   println!("{}", divide(5, 0).unwrap());  //Panics
               }
               ```
+
+              No exceptions, `Result<T,E>` enum and panics instead.
             </textarea>
           </section>
           <section data-markdown>
@@ -313,7 +315,7 @@
                       println!("{}", i);
                   }
                   let numbers = vec![2, 8];
-                  let strings: Vec<(String, i8)> = vec![1, 1, 2, 3, 5, 8, 13, 21]
+                  let strings: Vec<(String, i8)> = vec![1, 1, 2, 3, 5, 8]
                       .iter()
                       .filter(|i| *i % 2 == 0)
                       .map(|i| i.to_string())
