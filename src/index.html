@@ -325,6 +325,29 @@
           </section>
           <section data-markdown>
             <textarea data-template>
+              ## Traits
+
+              ```
+              trait Party {
+                  fn start_party() -> &'static str { "🎉" }
+                  fn serve_drinks(&self) -> &'static str;
+              }
+              trait BeerFestival : Party {
+                  fn serve_drinks(&self) -> &'static str { "🍻" }
+              }
+              impl Party for u8 {
+                  fn serve_drinks(&self) -> &'static str {
+                      if *self < 18 { "🚰" } else { "🍸"}
+                  }
+              }
+              fn main() {
+                  println!("{}", 16u8.start_party());
+              }
+              ```
+            </textarea>
+          </section>
+          <section data-markdown>
+            <textarea data-template>
               ## Generics
 
               ```rust
@@ -361,49 +384,6 @@
               ```
 
               No object inheritance!
-            </textarea>
-          </section>
-          <section data-markdown>
-            <textarea data-template>
-              ## Traits
-
-              ```
-              trait HasWidth {
-                  fn width(&self) -> usize;
-                  fn double_width(&self) -> usize { self.width() * 2 }
-              }
-              trait HasArea : HasWidth {
-                  fn area(&self) -> f64;
-              }
-              struct Square {
-                  height: usize,
-              }
-              impl HasWidth for Square {
-                  fn width(&self) -> usize { self.height }
-              }
-              impl HasArea for Square {
-                  fn area(&self) -> f64 { (self.height * self.width()) as f64 }
-              }
-              ```
-            </textarea>
-          </section>
-          <section data-markdown>
-            <textarea data-template>
-              ## Implementations
-
-              ```
-              trait PartyTime {
-                  fn start_party(&self) -> &'static str;
-              }
-              impl PartyTime for i8 {
-                  fn start_party(&self) -> &'static str {
-                      "🎉"
-                  }
-              }
-              fn main() {
-                  println!("{}", 5i8.start_party());
-              }
-              ```
             </textarea>
           </section>
           <section data-markdown>
