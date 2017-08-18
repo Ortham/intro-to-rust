@@ -449,16 +449,59 @@
             <section data-markdown>
               <textarea data-template>
                 ## Threads
+                
+                ```rust
+                fn independent_threads() {
+                    let t1 = std::thread::spawn(|| 23);
+                    let t2 = std::thread::spawn(|| 19);
+
+                    let v1 = t1.join().unwrap();
+                    let v2 = t2.join().unwrap();
+
+                    println!("{}, {}", v1, v2);
+                }
+                ```
               </textarea>
             </section>
             <section data-markdown>
               <textarea data-template>
                 ## Mutexes
+                
+                ```rust
+                fn mutexes() {
+                    let data = std::sync::Arc::new(std::sync::Mutex::new(0));
+                    let data_clone = data.clone();
+                    let t1 = std::thread::spawn(move || {
+                        let mut guard = data_clone.lock().unwrap();
+                        *guard += 19
+                    });
+                    let data_clone_2 = data.clone();
+                    let t2 = std::thread::spawn(move || {
+                        let mut guard = data_clone_2.lock().unwrap();
+                        *guard += 23;
+                    });
+                    t1.join().unwrap();
+                    t2.join().unwrap();
+                    println!("{}", *data.lock().unwrap()););
+                }
+                ```
               </textarea>
             </section>
             <section data-markdown>
               <textarea data-template>
                 ## Channels
+                
+                ```rust
+                fn channels() {
+                    let (tx1, rx) = std::sync::mpsc::channel();
+                    let tx2 = tx1.clone();
+                    std::thread::spawn(move || tx1.send(1));
+                    std::thread::spawn(move || tx2.send(2));
+                    for recieved in rx {
+                        println!("{}", recieved);
+                    }
+                }
+                ```
               </textarea>
             </section>
         </section>
