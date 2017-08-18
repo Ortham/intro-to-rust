@@ -521,11 +521,33 @@
                 ## Crates & Cargo
 
                 * Distributable units (libraries/executables) are known as crates, and can be published as source (with docs) to https://crates.io.
+                
+                Dependencies are specified in your crate's `Cargo.toml`.
+                ```toml
+                [dependencies]
+                unicase = "2.0.0"
+                ```
+                
+                And referenced in your code.
+                ```rust
+                extern crate unicase;
+                fn main() {
+                    assert!(unicase::eq("grüßen", "GRÜSSEN"));
+                }
+                ```
+              </textarea>
+            </section>
+            <section data-markdown>
+              <textarea data-template>
+                ## Crates & Cargo
+                
                 * Cargo provides a build system and dependency management
+                * Supports plugins, eg. clippy (linting), rustfmt (formatter), cbindgen (C header generation)
                 * Runs tests in parallel by default!
 
                 ```
                 cd ./project
+                cargo fmt
                 cargo test
                 cargo build --release
                 ```
