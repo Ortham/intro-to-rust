@@ -268,7 +268,7 @@
                 Err(E),
               }
               fn divide(dividend: i8, divisor: i8) -> Result<i8, (i8,i8)> {
-                  if dividend == 0 {
+                  if divisor == 0 {
                       Err((dividend, divisor))
                   } else {
                       Ok(dividend / divisor)
